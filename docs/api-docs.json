@@ -1,0 +1,279 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Swing Notes API",
+    "version": "1.0"
+  },
+  "servers": [{ "url": "http://localhost:8000/api" }],
+  "tags": [
+    {
+      "name": "User"
+    },
+    {
+      "name": "Notes"
+    }
+  ],
+  "components": {
+    "securitySchema": {
+      "bearerAuth": {
+        "type": "http",
+        "schema": "bearer",
+        "bearerFormat": "JWT",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "Response-success": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "Response-failure": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": false
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "UnAuthorized-error": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": false
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+
+  "paths": {
+    "/user/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Login by username and password and get back a token",
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "token": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          },
+
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "default": "hoang2411"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "hoang2411"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/signup": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Sign up new account by username",
+        "responses": {
+          "201": {
+            "description": "Sign up successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          },
+
+          "200": {
+            "description": "Username already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "default": "hoang2411"
+                  },
+                  "password": {
+                    "type": "string",
+                    "default": "hoang2411"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["Notes"],
+        "summary": "Add new a note ",
+        "responses": {
+          "201": {
+            "description": "Add new a note successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnAuthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized-error"
+                }
+              }
+            }
+          },
+          "200": [
+            {
+              "description": "The note already exists",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Response-failure"
+                  }
+                }
+              }
+            },
+            {
+              "description": "Cannot add the note on database",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Response-failure"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "max": 50,
+                    "default": "Note 1 "
+                  },
+                  "text": {
+                    "type": "string",
+                    "max": 300,
+                    "default": "Text for the Note 1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
