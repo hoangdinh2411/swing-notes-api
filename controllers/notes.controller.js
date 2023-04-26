@@ -63,6 +63,7 @@ async function addNewNote(req, res) {
 }
 
 async function updateNote(req, res) {
+  console.log(req.body.note_id)
   try {
     if (!req.params.note_id) {
       return res.status(400).json({

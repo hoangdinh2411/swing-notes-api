@@ -6,7 +6,9 @@ require('dotenv').config()
 const app = express()
 
 app.use(express.json())
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(api_docs))
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(api_docs), (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+})
 app.use('/api', require('./routers/index.js'))
 
 const port = 8000

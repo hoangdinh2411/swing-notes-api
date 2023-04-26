@@ -13,13 +13,12 @@
       "name": "Notes"
     }
   ],
+
   "components": {
-    "securitySchema": {
-      "bearerAuth": {
+    "securitySchemes": {
+      "BearerAuth": {
         "type": "http",
-        "schema": "bearer",
-        "bearerFormat": "JWT",
-        "in": "header"
+        "scheme": "bearer"
       }
     },
     "schemas": {
@@ -29,6 +28,43 @@
           "success": {
             "type": "boolean",
             "default": true
+          }
+        }
+      },
+      "Response-success-get-method": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": true
+          },
+          "notes": {
+            "type:": "array",
+            "default": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "modifiedAt": {
+                    "type": "string"
+                  },
+                  "user_id": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
           }
         }
       },
@@ -190,10 +226,51 @@
       }
     },
     "/notes": {
+      "get": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": ["Notes"],
+        "summary": "Get all notes from database",
+        "responses": {
+          "200": {
+            "description": "Get all success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-success-get-method"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnAuthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized-error"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "security": [
           {
-            "bearerAuth": []
+            "BearerAuth": []
           }
         ],
         "tags": ["Notes"],
@@ -228,29 +305,7 @@
                 }
               }
             }
-          },
-          "200": [
-            {
-              "description": "The note already exists",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/Response-failure"
-                  }
-                }
-              }
-            },
-            {
-              "description": "Cannot add the note on database",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/Response-failure"
-                  }
-                }
-              }
-            }
-          ]
+          }
         },
         "requestBody": {
           "content": {
@@ -268,6 +323,174 @@
                     "max": 300,
                     "default": "Text for the Note 1"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes/{note_id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "note_id",
+          "type": "string",
+          "required": true,
+          "description": "Note id of the note."
+        }
+      ],
+      "put": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+
+        "tags": ["Notes"],
+        "summary": "Update a note by id ",
+        "responses": {
+          "200": {
+            "description": "Update the note successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnAuthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized-error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "max": 50,
+                    "default": "Note 1 "
+                  },
+                  "text": {
+                    "type": "string",
+                    "max": 300,
+                    "default": "Text for the Note 1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": ["Notes"],
+        "summary": "Delete a note by id ",
+        "responses": {
+          "200": {
+            "description": "Delete the note successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnAuthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized-error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes/search": {
+      "parameters": [
+        {
+          "in": "query",
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "search note by title "
+        }
+      ],
+      "get": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+
+        "tags": ["Notes"],
+        "summary": "Search a note by title ",
+        "responses": {
+          "200": {
+            "description": "Search the note successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-success-get-method"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response-failure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnAuthorized error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized-error"
                 }
               }
             }
