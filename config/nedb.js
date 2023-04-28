@@ -58,7 +58,22 @@ const DB = {
       )
     })
   },
-  searchingNotes: function (title) {
+  findOneNoteById: function (id) {
+    return new Promise((resolve, reject) => {
+      this.notes.findOne(
+        {
+          id,
+        },
+        (err, docs) => {
+          if (err) {
+            reject(err)
+          }
+          resolve(docs)
+        }
+      )
+    })
+  },
+  searchingNotes: function (title, user_id) {
     return new Promise((resolve, reject) => {
       return DB.notes.find(
         {

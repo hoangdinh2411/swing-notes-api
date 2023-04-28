@@ -1,4 +1,9 @@
+{"id":"32600bf6-5322-47c6-bec9-c1dce95a29e2","user_id":"f134d79c-0896-4059-bd4a-3b8075d88205","title":1,"text":"hoang2411","createdAt":{"$$date":1682665311993},"modifiedAt":{"$$date":1682665311993},"_id":"AQo5zyj6rZ894Ras"}
 {"id":"057e27e6-cb98-4d9c-9b6e-57746f6ed302","user_id":"86799216-c0a4-484f-9066-a4752b0c66ea","title":"Note  1 ","text":"hoang2411","createdAt":{"$$date":1682402426719},"modifiedAt":{"$$date":1682402426719},"_id":"ZJfDyJkHhYHYGov6"}
 {"id":"561548e9-d532-4aed-96ed-2fcf84d370fc","user_id":"86799216-c0a4-484f-9066-a4752b0c66ea","title":"Note 1 ","text":"Text for the Note 1","createdAt":{"$$date":1682431913620},"modifiedAt":{"$$date":1682431913620},"_id":"ZO5CQgCQYQZBrtOw"}
 {"id":"c46b6359-f698-4ef3-9517-388121e6b552","user_id":"86799216-c0a4-484f-9066-a4752b0c66ea","title":"Book 1 ","text":"hoang2411","createdAt":{"$$date":1682402416719},"modifiedAt":{"$$date":1682402416719},"_id":"dbKqabzzvMS7T38c"}
 {"id":"da94c98b-c11e-4f00-b82f-3af7cc174096","user_id":"86799216-c0a4-484f-9066-a4752b0c66ea","title":"Note 2","text":"hoang2411","createdAt":{"$$date":1682370389126},"modifiedAt":{"$$date":1682370389126},"_id":"lfN2Ki3fadQUk10q"}
+{"id":"1cc8a1b9-8b0d-4c05-8946-69d75c611840","user_id":"f134d79c-0896-4059-bd4a-3b8075d88205","title":"Node test","createdAt":{"$$date":1682667597883},"modifiedAt":{"$$date":1682667609777},"_id":"zhf5nfPzENrogex2"}
+{"$$deleted":true,"_id":"zhf5nfPzENrogex2"}
+{"id":"86ac5092-d207-4b8d-ad7d-96599dc74dcb","user_id":"f134d79c-0896-4059-bd4a-3b8075d88205","title":"1221","text":"111","createdAt":{"$$date":1682667679363},"modifiedAt":{"$$date":1682667679363},"_id":"ennVYfvku31LvR9Q"}
+{"id":"86ac5092-d207-4b8d-ad7d-96599dc74dcb","user_id":"f134d79c-0896-4059-bd4a-3b8075d88205","title":"Node test","text":"111","createdAt":{"$$date":1682667679363},"modifiedAt":{"$$date":1682667686884},"_id":"ennVYfvku31LvR9Q"}

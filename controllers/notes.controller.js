@@ -1,6 +1,6 @@
 const { DB } = require('../config/nedb')
 const { v4: uuidv4 } = require('uuid')
-async function getNotes(req, res) {
+function getNotes(req, res) {
   const user_id = req.user_id
   DB.notes.find(
     {
@@ -50,7 +50,7 @@ async function addNewNote(req, res) {
       if (err) {
         return res.status(200).json({
           success: false,
-          message: 'Cannot add the note on database',
+          message: err.message || 'Cannot add the note on database',
         })
       }
     })
@@ -61,9 +61,7 @@ async function addNewNote(req, res) {
     })
   }
 }
-
 async function updateNote(req, res) {
-  console.log(req.body.note_id)
   try {
     if (!req.params.note_id) {
       return res.status(400).json({
@@ -71,30 +69,29 @@ async function updateNote(req, res) {
         message: 'Note id is required',
       })
     }
+    const note = await DB.findOneNoteById(req.params.note_id)
+    if (!note)
+      return res.status(404).json({
+        success: false,
+        message: 'Note not found',
+      })
+
     return DB.notes.update(
       {
         id: req.params.note_id,
       },
       {
         $set: {
-          title: req.body.title,
-          text: req.body.text,
+          ...req.body,
           modifiedAt: new Date(),
         },
       },
       {},
-      (err, numReplaced) => {
-        if (numReplaced === 0) {
-          return res.status(404).json({
-            success: false,
-            message: 'Note not found',
-          })
-        }
-
+      (err) => {
         if (err) {
           return res.status(200).json({
             success: false,
-            message: 'Cannot update the note on database',
+            message: err.message || 'Cannot update the note on database',
           })
         }
         return res.status(200).json({
@@ -109,14 +106,15 @@ async function updateNote(req, res) {
     })
   }
 }
-async function deleteNote(req, res) {
+function deleteNote(req, res) {
+  console.log(req.params.note_id)
+  if (!req.params.note_id) {
+    return res.status(400).json({
+      success: false,
+      message: 'Note id is required',
+    })
+  }
   try {
-    if (!req.params.note_id) {
-      return res.status(400).json({
-        success: false,
-        message: 'Note id is required',
-      })
-    }
     return DB.notes.remove(
       {
         id: req.params.note_id,
@@ -132,7 +130,7 @@ async function deleteNote(req, res) {
         if (err) {
           return res.status(200).json({
             success: false,
-            message: 'Cannot update the note on database',
+            message: err.message || 'Cannot update the note on database',
           })
         }
         return res.status(200).json({
@@ -157,7 +155,7 @@ async function searchNotes(req, res) {
         message: 'Search text is required',
       })
     }
-    const notes = await DB.searchingNotes(title)
+    const notes = await DB.searchingNotes(title, req.user_id)
     return res.status(200).json({
       success: true,
       notes,
