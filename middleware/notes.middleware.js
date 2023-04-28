@@ -11,8 +11,15 @@ const checkBody = async (req, res, next) => {
 }
 const checkBodyUpdateNote = async (req, res, next) => {
   try {
-    await updateNoteSchema.validateAsync(req.body)
-    next()
+    if (req.body.hasOwnProperty('title') || req.body.hasOwnProperty('text')) {
+      await updateNoteSchema.validateAsync(req.body)
+      next()
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Title or text is required',
+      })
+    }
   } catch (error) {
     return res.status(400).json({ success: false, message: error.message })
   }

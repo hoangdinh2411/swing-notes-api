@@ -39,6 +39,7 @@ const updateNoteSchema = joi.object({
     'string.base': 'Title must be a string',
   }),
 })
+
 module.exports = {
   userSchema,
   noteSchema,
